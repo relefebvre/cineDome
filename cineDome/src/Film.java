@@ -6,7 +6,6 @@ public class Film {
 	public Date dateSortie;
 	public int note;
 	public String categorie;
-	private SimpleDateFormat sdf;
 	public List<Date> seances;
 
 	public Film(String titre, int note, String categorie) {

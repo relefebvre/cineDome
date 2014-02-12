@@ -23,10 +23,7 @@ public class Lecteur {
 		path = Paths.get(nomFic);
 		in = Files.newInputStream(path);
 		inr = new InputStreamReader(in) ;
-		buf = new BufferedReader(inr) ;
-		
-		
-		
+		buf = new BufferedReader(inr) ;	
 	}
 	
 	public String read() throws IOException {
@@ -42,7 +39,6 @@ public class Lecteur {
 			throw new Exception("Erreur de syntaxe dans le fichier source\n");
 		}
 		
-		return split;
-		
+		return split;	
 	}
 }
