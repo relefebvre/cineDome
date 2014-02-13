@@ -16,7 +16,6 @@ public class Lecteur {
 	
 	public Lecteur(String nomFic) {
 		this.nomFic=nomFic ; 
-		
 	}
 	
 	public void open() throws IOException {

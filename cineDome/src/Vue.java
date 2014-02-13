@@ -8,8 +8,8 @@ public class Vue {
 		for (Film f : films) {
 			System.out.println(f.titre);
 			System.out.println("Sortie le : "+f.dateSortie);
-			System.out.println("Catégorie : "+f.categorie);
-			System.out.println("Note : "+f.note);
+			System.out.println("Cat�gorie : "+f.categorie);
+			System.out.println("Note : "+f.notePresse);
 			System.out.println("Horraires Séances : ");
 			for (Date d : f.getSeances()) {
 				System.out.println("\t"+d);

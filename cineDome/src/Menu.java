@@ -1,10 +1,12 @@
 import java.util.Scanner;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 
 public class Menu {
 	private Cine cineDome;
 	private Vue vueTexte;
 	private Scanner scan;
+	private Lecteur lect;
 
 	public Menu(Vue vue) {
 		vueTexte = vue;
@@ -27,14 +29,12 @@ public class Menu {
 		try {
 			choix =  scan.nextInt();
 			if (choix < min || choix > max) {
-				scan.close();
 				throw new Exception();
 			}
 		}
 		catch (Exception e) {
 			return -1;
 		}
-		scan.close();
 		return choix;
 	}
 
@@ -44,8 +44,7 @@ public class Menu {
 				creerFilm();
 				break;
 			case 2 :
-				System.out.println("TEsts");
-				//vueTexte.affiche(cineDome.films);
+				vueTexte.affiche(cineDome.films);
 				break;
 			case 3 :
 				cineDome.alphaSort() ;
@@ -59,19 +58,68 @@ public class Menu {
 			default : System.out.println("Choix incorrect");
 		}
 	}
+	
+	public Film lireFilm(String[] src) {
+		Film f;
+		
+		f = new Film(src[0],src[2],src[3],src[4],src[5],src[6],src[7]);
+		
+		try {
+			f.setDateDeSortie(src[1]);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		String[] seances = src[8].split(",");
+		
+		for (String s : seances) {
+			try {
+				f.ajouterSeance(s);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		return f;
+	}
 
 	public void creerFilm() {
-		/*Scanner scan;
-		scan = new Scanner(System.in);*/
 		String titre;
 		String date;
 		int cat=0;
 		int note;
 		int nbSeances;
 		int i;
-		Film f;
+		String src;
+		String[] res = new String[9];
+		String raw;
+		
+		scan.nextLine();
+		System.out.print("Fichier source : ");
+		src = scan.nextLine();
+		
+		lect = new Lecteur(src);
+		try {
+			lect.open();
+			while ((raw = lect.read()) != null) {
+				try {
+					Film f;
+					res = lect.parse(raw);
+					f = lireFilm(res);
+					cineDome.ajouterFilm(f);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
-		System.out.print("Titre : ");
+		/*System.out.print("Titre : ");
 		titre = scan.nextLine();
 		
 		System.out.print("Date de sortie (dd/mm/aaaa) : ");
@@ -116,8 +164,8 @@ public class Menu {
 			}
 		}
 
-		cineDome.ajouterFilm(f);
-		scan.close();
+		cineDome.ajouterFilm(f);*/
+		//scan.nextLine();
 	}
 
 	public boolean traiterDate(String date) {
