@@ -4,7 +4,8 @@ import java.text.SimpleDateFormat;
 public class Film {
 	public String titre;
 	public Date dateSortie;
-	public int duree, notePresse, noteSpect;
+	public int duree;
+	public float notePresse, noteSpect;
 	public String categorie;
 	public String affiche;
 	public String[] acteurs;
@@ -16,21 +17,21 @@ public class Film {
 			this.duree = Integer.parseInt(duree);
 		}
 		catch (Exception e) {
-			System.out.println("Problème parse Durée");
+			System.out.println("Problï¿½me parse Durï¿½e");
 		}
 		this.affiche = affiche;
 		this.categorie = categorie;
 		try {
-			this.notePresse = Integer.parseInt(notePresse);
+			this.notePresse = Float.parseFloat(notePresse);
 		}
 		catch (Exception e) {
-			System.out.println("Problème parse notePresse");
+			System.out.println("Problï¿½me parse notePresse");
 		}
 		try {
-			this.noteSpect = Integer.parseInt(noteSpect);
+			this.noteSpect = Float.parseFloat(noteSpect);
 		}
 		catch (Exception e) {
-			System.out.println("Problème parse noteSpect");
+			System.out.println("Problï¿½me parse noteSpect");
 		}
 		this.acteurs = acteurs.split(", ");
 		seances = new ArrayList<Date>();
