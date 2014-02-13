@@ -17,7 +17,8 @@ public class Film {
 			this.duree = Integer.parseInt(duree);
 		}
 		catch (Exception e) {
-			System.out.println("Problï¿½me parse Durï¿½e");
+			System.out.println("Problème parse Durée");
+			this.duree = -1;
 		}
 		this.affiche = affiche;
 		this.categorie = categorie;
@@ -25,13 +26,15 @@ public class Film {
 			this.notePresse = Float.parseFloat(notePresse);
 		}
 		catch (Exception e) {
-			System.out.println("Problï¿½me parse notePresse");
+			System.out.println("Problème parse notePresse");
+			this.notePresse = -1;
 		}
 		try {
 			this.noteSpect = Float.parseFloat(noteSpect);
 		}
 		catch (Exception e) {
-			System.out.println("Problï¿½me parse noteSpect");
+			System.out.println("Problème parse noteSpect");
+			this.noteSpect = -1;
 		}
 		this.acteurs = acteurs.split(", ");
 		seances = new ArrayList<Date>();

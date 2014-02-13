@@ -1,28 +1,19 @@
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 
 public class Lecteur {
-	private Path path;
-	private String nomFic ;
-	private InputStream in ;
-	private InputStreamReader inr ;
+	private String path;
 	private BufferedReader buf ;
 	
 	public Lecteur(String nomFic) {
-		this.nomFic=nomFic ; 
+		this.path=nomFic ; 
 	}
 	
 	public void open() throws IOException {
-		path = Paths.get(nomFic);
-		in = Files.newInputStream(path);
-		inr = new InputStreamReader(in) ;
-		buf = new BufferedReader(inr) ;	
+		buf = new BufferedReader(new InputStreamReader(new FileInputStream(path),"UTF-8")) ;	
 	}
 	
 	public String read() throws IOException {

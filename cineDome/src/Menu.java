@@ -1,6 +1,5 @@
 import java.util.Scanner;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 
 public class Menu {
 	private Cine cineDome;
@@ -17,9 +16,10 @@ public class Menu {
 	public void afficherMenu() {
 		System.out.println("1\tAjouter Films");
 		System.out.println("2\tAfficher Films");
-		System.out.println("3\tTrier les films(alphabetique)");
-		System.out.println("4\tTrier les films(note)");
-		System.out.println("5\tTrier les films(date)");
+		System.out.println("3\tAfficher un Film au hazard");
+		System.out.println("4\tTrier les films(alphabetique)");
+		System.out.println("5\tTrier les films(note Presse)");
+		System.out.println("6\tTrier les films(date)");
 		System.out.println("9\tQuitter");
 		System.out.print("Choix : ");
 	}
@@ -47,12 +47,14 @@ public class Menu {
 				vueTexte.affiche(cineDome.films);
 				break;
 			case 3 :
+				vueTexte.afficheRand(cineDome.films);
+			case 4 :
 				cineDome.alphaSort() ;
 				break ;
-			case 4 :
+			case 5 :
 				cineDome.noteSort() ;
 				break ;
-			case 5 : 
+			case 6 : 
 				cineDome.dateSort() ;
 				break ;
 			default : System.out.println("Choix incorrect");
@@ -67,8 +69,7 @@ public class Menu {
 		try {
 			f.setDateDeSortie(src[1]);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Format de date incorrect");
 		}
 		
 		String[] seances = src[8].split(",");
@@ -77,8 +78,7 @@ public class Menu {
 			try {
 				f.ajouterSeance(s);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("Format de s�ance incorrect");
 			}
 		}
 		
@@ -86,12 +86,6 @@ public class Menu {
 	}
 
 	public void creerFilm() {
-		String titre;
-		String date;
-		int cat=0;
-		int note;
-		int nbSeances;
-		int i;
 		String src;
 		String[] res = new String[9];
 		String raw;
@@ -107,87 +101,17 @@ public class Menu {
 				try {
 					Film f;
 					res = lect.parse(raw);
+					if (res[0].length() == 0) {
+						continue;
+					}
 					f = lireFilm(res);
 					cineDome.ajouterFilm(f);
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println("Probl�me de syntaxe du fichier source");
 				}
 			}
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			System.out.println("Probl�me d'ouverture du fichier source");
 		}
-
-		/*System.out.print("Titre : ");
-		titre = scan.nextLine();
-		
-		System.out.print("Date de sortie (dd/mm/aaaa) : ");
-		date = scan.nextLine();
-		while (!traiterDate(date)) {
-			System.out.print("Format de date incorrect, veuillez retapez : ");
-			date = scan.nextLine();
-		}
-
-		System.out.print("Note (/10) des utilisateurs : ");
-		note = getChoix(0 ,10);
-		while (note == -1) {
-			System.out.print("Note incorrecte, veuillez retaper la note : ");
-			note = getChoix(0, 10);
-		}
-	
-		String categorie = cineDome.getCategorie(cat);	
-		f = new Film(titre,note,categorie);
-
-		try {
-			f.setDateDeSortie(date);
-		} catch(Exception e) {
-		}
-
-		System.out.print("Nombre de  séances : ");
-		nbSeances = scan.nextInt();
-		while (nbSeances < 0) {
-			System.out.print("Nombre de séances inférieur à 0, veuillez retaper : ");
-			nbSeances = scan.nextInt();
-		}
-		for (i=0 ; i<nbSeances ; i++) {
-			String heure;
-			System.out.print("Heure de la séance n°"+(i+1)+" (HH:mm) : ");
-			heure = scan.nextLine();
-			while (!traiterHeure(heure)) {
-				System.out.print("Format d'horaire incorect, veuillez retaper : ");
-				heure = scan.nextLine();
-			}
-			try {
-				f.ajouterSeance(heure);
-			} catch(Exception e) {
-			}
-		}
-
-		cineDome.ajouterFilm(f);*/
-		//scan.nextLine();
 	}
-
-	public boolean traiterDate(String date) {
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		try {
-			sdf.parse(date);
-		}
-		catch (Exception e) {
-			return false;
-		}
-		return true;
-	}
-
-        public boolean traiterHeure(String heure) {
-                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-                try {
-                        sdf.parse(heure);
-                }
-                catch (Exception e) {
-                        return false;
-                }
-                return true;
-        }
-
 }
