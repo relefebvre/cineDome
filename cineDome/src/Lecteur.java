@@ -13,7 +13,7 @@ public class Lecteur {
 	}
 	
 	public void open() throws IOException {
-		buf = new BufferedReader(new InputStreamReader(new FileInputStream(path),"UTF-8")) ;	
+		buf = new BufferedReader(new InputStreamReader(new FileInputStream(path),"UTF-8")); 
 	}
 	
 	public String read() throws IOException {
