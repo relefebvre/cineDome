@@ -3,7 +3,7 @@ import java.io.IOException;
 public class Menu {
 	private Cine cineDome;
 	private Vue vueTexte;
-	private Lecteur lect;
+	public Lecteur lect;
 
 	public Menu(Vue vue) {
 		vueTexte = vue;
