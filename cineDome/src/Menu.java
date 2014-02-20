@@ -1,7 +1,7 @@
 import java.io.IOException;
 
 public class Menu {
-	private Cine cineDome;
+	public Cine cineDome;
 	private Vue vueTexte;
 	public Lecteur lect;
 
@@ -13,7 +13,7 @@ public class Menu {
 	public void traiterChoix(int choix) {
 		switch(choix) {
 			case 1 : 
-				creerFilm(vueTexte.saisirPath());
+				//creerFilm(vueTexte.saisirPath());
 				break;
 			case 2 :
 				vueTexte.affiche(cineDome.films);
@@ -57,13 +57,10 @@ public class Menu {
 		return f;
 	}
 
-	public void creerFilm(String src) {
+	public void creerFilm() throws Exception {
 		String[] res = new String[9];
 		String raw;
 		
-		lect = new Lecteur(src);
-		try {
-			lect.open();
 			while ((raw = lect.read()) != null) {
 				try {
 					Film f;
@@ -74,11 +71,19 @@ public class Menu {
 					f = lireFilm(res);
 					cineDome.ajouterFilm(f);
 				} catch (Exception e) {
-					System.out.println("Probl�me de syntaxe du fichier source");
+					//System.out.println("Probl�me de syntaxe du fichier source");
+					throw e;
 				}
 			}
-		} catch (IOException e1) {
-			System.out.println("Probl�me d'ouverture du fichier source");
+
+	}
+	
+	public void openFile(String path) throws IOException {
+		lect = new Lecteur(path);
+		try {
+			lect.open();
+		}catch (IOException e1) {
+			throw e1;
 		}
 	}
 }

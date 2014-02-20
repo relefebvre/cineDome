@@ -17,8 +17,6 @@ public class GUI implements ActionListener{
 	private JMenuBar menuBar;
 	private JMenu fichier;
 	private JMenuItem selectFile;
-	private JMenuItem openFile;
-	private JMenuItem readFile;
 	private JPanel boutons;
 	private JPanel film;
 	private JPanel navigation;
@@ -35,9 +33,13 @@ public class GUI implements ActionListener{
 	private String[] dataListe;
 	private File fileSource;
 	private JLabel info;
-	private Lecteur lect;
+	public Menu control;
 	
-	public GUI(){
+	private JTextArea test;
+	
+	public GUI(Menu menu){
+		this.control = menu;
+		
 		frame = new JFrame("Cine Dome");
 		frame.setMinimumSize(new Dimension(720,640));
 		
@@ -55,16 +57,12 @@ public class GUI implements ActionListener{
 		frame.setVisible(true);
 	}
 	
-	public void setMenu() {
+	public void setMenu() {	
 		menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
 		fichier = new JMenu("Fichier");
 		menuBar.add(fichier);
 		selectFile = new JMenuItem("Selectionner un fichier");
-		openFile = new JMenuItem("Ouvrir le fichier");
-		openFile.setEnabled(false);
-		readFile = new JMenuItem("Lire le fichier");
-		readFile.setEnabled(false);
 		
 		selectFile.addActionListener(new ActionListener(){
 	        public void actionPerformed(ActionEvent event) {
@@ -72,38 +70,23 @@ public class GUI implements ActionListener{
 	   			chooser.showOpenDialog(null);
 				fileSource = chooser.getSelectedFile();
 				info.setText("Fichier selectionné : "+fileSource.getName());
-				openFile.setEnabled(true);
-	           }
-	        }
-		});
-		
-		openFile.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				if (event.getSource() == openFile) {
-					lect = new Lecteur(fileSource.getPath());
+				try {
+					control.openFile(fileSource.getPath());
 					try {
-						lect.open();
-					} catch (IOException e) {
-						info.setText("Erreur d'ouverture du fichier : "+fileSource.getPath());
-						info.setForeground(Color.red);
+						control.creerFilm();
+					} catch (Exception e) {
+						info.setText("Problème de syntaxe dans le fichier : "+fileSource.getPath());
 					}
-					info.setText("Fichier ouvert : "+fileSource.getPath());
-					readFile.setEnabled(true);
+				} catch(IOException e1) {
+					info.setText("Problème d'ouverture du fichier : "+fileSource.getPath()+" :: "+e1.getMessage());
+					info.setForeground(Color.red);
 				}
-			}
-		});
-		
-		/*readFile.addActionListener(new ActionListener(){
-	        public void actionPerformed(ActionEvent event) {
-	           if(event.getSource() == readFile) {
-	        	   
 	           }
+	           afficherTitreFilms();
 	        }
-		});*/
+		});
 		
 		fichier.add(selectFile);
-		fichier.add(openFile);
-		fichier.add(readFile);
 		
 	}
 	
@@ -123,6 +106,9 @@ public class GUI implements ActionListener{
 		frame.add(navigation,BorderLayout.SOUTH);
 		frame.add(liste,BorderLayout.EAST);
 		film.add(scrollPane,BorderLayout.SOUTH);
+		
+		test = new JTextArea();
+		film.add(test,BorderLayout.CENTER);
 	}
 	
 	public void addBoutons() {
@@ -161,7 +147,15 @@ public class GUI implements ActionListener{
 		
 	}
 	
-	public void actionPerformed(ActionEvent e) {
-
+	public void afficherTitreFilms() {
+		List<Film> films = control.cineDome.getFilms();
+		for (Film f : films) {
+			test.append(f.titre+"\n");
+		}
 	}
+
+	public void actionPerformed(ActionEvent arg0) {
+		
+	}
+	
 }
