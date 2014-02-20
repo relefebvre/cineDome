@@ -3,8 +3,8 @@
 public class Main {
 	public static void main(String[] argv) {
 		Vue vue = new Vue();
-		GUI vueG = new GUI();
 		Menu menu = new Menu(vue);
+		GUI vueG = new GUI(menu);
 
 		int choix;
 
