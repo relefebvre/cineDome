@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
@@ -32,6 +33,7 @@ public class GUI implements ActionListener{
 	private JButton suivant;
 	private JButton precedent;
 	private JButton aleatoire;
+	private JButton alpha;
 	private JFileChooser chooser;
 	private JList<String> listeFilms; 
 	private File fileSource;
@@ -124,11 +126,24 @@ public class GUI implements ActionListener{
 	public void addBoutons() {
 		recherche = new JButton("Rechercher");
 		tri = new JButton("Trier");
+		alpha = new JButton("Alpha");
+		
+		alpha.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(e.getSource() == alpha){
+					afficherTitreFilms();
+				}
+			}
+		});
+		
 		
 		boutons.setLayout(new GridLayout(5,0));
 		
 		boutons.add(recherche);
 		boutons.add(tri);
+		boutons.add(alpha);
 	}
 	
 	public void addNavigation() {
@@ -278,7 +293,7 @@ public class GUI implements ActionListener{
 		for(Date d : f.getSeances()){
 			listModel.addElement(sdfS.format(d));
 		}
-		listeSceances = new JList<>(listModel);
+		listeSceances = new JList<String>(listModel);
 		listeSceances.setVisibleRowCount(4);
 		scrollSceances.setViewportView(listeSceances);
 		
@@ -291,10 +306,15 @@ public class GUI implements ActionListener{
 	public void afficherTitreFilms() {
 		DefaultListModel<String> listModel = new DefaultListModel<String>();
 
-		for (Film f : control.cineDome.films) {
-			listModel.addElement(f.titre);
+		try {
+			for (String f : control.cineDome.data.getListeFilms('a')) {
+				listModel.addElement(f);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		listeFilms = new JList<>(listModel);
+		listeFilms = new JList<String>(listModel);
 		listeFilms.setVisibleRowCount(20);
 		JScrollPane listScrollPane2 = new JScrollPane(listeFilms);
 		
