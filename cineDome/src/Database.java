@@ -14,16 +14,19 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 
 
 public class Database {
 	
 	private JFrame connexionDB;
 	private JPanel paneConnexion;
+	private JTextField AddrText;
 	private JTextField LoginText;
 	private JPasswordField mdpText;
 	private JButton valider;
 	
+	private String addrBase = "//hina/phpmyadmin/dbalducros";
 	private String login;
 	private char[] mdp;
 	
@@ -33,13 +36,7 @@ public class Database {
 		
 		setConnexion();
 		
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			connection = DriverManager.getConnection("jdbc:mysql://hina/phpmyadmin/dbalducros", login, new String(mdp));
-		}
-		catch (Exception e){
-			e.printStackTrace();
-		}
+		
 		
 		connexionDB.setAlwaysOnTop(true);
 		connexionDB.setVisible(true);
@@ -61,13 +58,13 @@ public class Database {
 	public List<String> getListeFilms(char tri) throws SQLException{
 		String triReq ="" ;
 		switch(tri){
-		case 'a' : triReq = " ORDER BY `COL 1`";
+		case 'a' : triReq = " ORDER BY `COL 1`";//tri par ordre alphabetique
 		break;
-		case 'p': triReq = " ORDER BY `COL 6`";
+		case 'p': triReq = " ORDER BY `COL 6`";//tri par note de presse
 		break;
-		case 's' : triReq = " ORDER BY `COL 7`";
+		case 's' : triReq = " ORDER BY `COL 7`";//tri par note des spectateurs
 		break ;
-		case 'd' : triReq = " ORDER BY `COL 2`";
+		case 'd' : triReq = " ORDER BY `COL 2`";//tri par date de sortie
 		break;
 		default:
 		
@@ -104,21 +101,26 @@ public class Database {
 	}
 	
 	public void setConnexion() {
-		connexionDB = new JFrame("Connexion à la Base de Donnée");
-		connexionDB.setMinimumSize(new Dimension(200,200));
+		connexionDB = new JFrame("Connexion ï¿½ la Base de Donnï¿½e");
+		connexionDB.setMinimumSize(new Dimension(400,120));
 		
 		connexionDB.setLayout(new BorderLayout());
+		connexionDB.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		
 		paneConnexion = new JPanel();
 		
 		connexionDB.add(paneConnexion);
 		
+		JLabel addrLabel = new JLabel("Adresse");
 		JLabel loginLabel = new JLabel("Login");
 		JLabel mdpLabel = new JLabel("Mot de Passe"); 
 		LoginText = new JTextField();
 		mdpText = new JPasswordField();
+		AddrText = new JTextField();
 		
-		paneConnexion.setLayout(new GridLayout(3,2));
+		paneConnexion.setLayout(new GridLayout(4,2));
+		paneConnexion.add(addrLabel);
+		paneConnexion.add(AddrText);
 		paneConnexion.add(loginLabel);
 		paneConnexion.add(LoginText);
 		paneConnexion.add(mdpLabel);
@@ -131,7 +133,18 @@ public class Database {
 				if (e.getSource() == valider) {
 					login = LoginText.getText();
 					mdp = mdpText.getPassword();
-					connexionDB.dispose();
+					addrBase = AddrText.getText();
+					
+					if(login.length() != 0){
+						connexionDB.dispose();
+						try {
+							Class.forName("com.mysql.jdbc.Driver");
+							connection = DriverManager.getConnection("jdbc:mysql:"+addrBase, login, new String(mdp));
+						}
+						catch (Exception exc){
+							exc.printStackTrace();
+						}
+					}
 				}
 			}
 		});

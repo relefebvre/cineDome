@@ -21,19 +21,24 @@ import javax.swing.*;
 public class GUI implements ActionListener{
 	
 	private JFrame frame;
+	private JFrame rechFrame;
 	private JMenuBar menuBar;
 	private JMenu fichier;
 	private JMenuItem selectFile;
+	private JPanel rechPanel;
 	private JPanel boutons;
 	private JPanel film;
-	private JPanel navigation;
+	//private JPanel navigation;
 	private JPanel liste;
 	private JButton recherche;
-	private JButton tri;
-	private JButton suivant;
-	private JButton precedent;
-	private JButton aleatoire;
-	private JButton alpha;
+	private JButton triP;
+	private JButton triS;
+	private JButton triD;
+	private JButton triA;
+	//private JButton suivant;
+	//private JButton precedent;
+	//private JButton aleatoire;
+	private JButton rechStart;
 	private JFileChooser chooser;
 	private JList<String> listeFilms; 
 	private File fileSource;
@@ -43,6 +48,8 @@ public class GUI implements ActionListener{
 	private JLabel duree;
 	private JLabel notePresse, noteSpectateur;
 	private JLabel categorie;
+	private JLabel rechStatus;
+	private JTextField rechField;
 	private JList<String> listeSceances; 
 	private JScrollPane scrollSceances;
 	private JList<String> listeActeurs;
@@ -65,7 +72,7 @@ public class GUI implements ActionListener{
 		setLayout();
 		setPanel();
 		addBoutons();
-		addNavigation();
+		//addNavigation();
 		addLabel();
 		setListe();
 		setFilm();
@@ -98,7 +105,7 @@ public class GUI implements ActionListener{
 					info.setForeground(Color.red);
 				}
 	           }
-	           afficherTitreFilms();
+	           afficherTitreFilms('a');
 	           updateFilm(control.cineDome.films.get(indexNav));
 	        }
 		});
@@ -114,12 +121,12 @@ public class GUI implements ActionListener{
 	public void setPanel() {
 		boutons = new JPanel();
 		film = new JPanel();
-		navigation = new JPanel();
+		//navigation = new JPanel();
 		liste = new JPanel();
 		
 		frame.add(boutons,BorderLayout.WEST);
 		frame.add(film,BorderLayout.CENTER);
-		frame.add(navigation,BorderLayout.SOUTH);
+		//frame.add(navigation,BorderLayout.SOUTH);
 		frame.add(liste,BorderLayout.EAST);
 	
 		
@@ -128,28 +135,104 @@ public class GUI implements ActionListener{
 	
 	public void addBoutons() {
 		recherche = new JButton("Rechercher");
-		tri = new JButton("Trier");
-		alpha = new JButton("Alpha");
+		triA = new JButton("Trier Alpha");
+		triP = new JButton("Trier Note Presse");
+		triS = new JButton("Trier Note Spectateur");
+		triD = new JButton("Trier Date");
 		
-		alpha.addActionListener(new ActionListener() {
+		recherche.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(e.getSource() == alpha){
-					afficherTitreFilms();
+				if(e.getSource()==recherche){
+					rechFrame = new JFrame("Rechercher par nom");
+					rechPanel = new JPanel();
+					rechField = new JTextField(10);
+					rechStart = new JButton("Chercher");
+					rechStatus = new JLabel();
+					
+					rechStart.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent arg0) {
+							if(arg0.getSource()==rechStart){
+								try{
+									updateFilm(control.cineDome.data.getFilm(rechField.getText()));
+
+									rechFrame.dispose();
+								} catch(Exception e) {
+									rechStatus.setText("Aucun film ne correspond à la recherche.");
+								}
+							}
+							
+						}
+					});
+					
+					rechFrame.setMinimumSize(new Dimension(250, 150));
+					
+					rechPanel.add(rechField);
+					rechPanel.add(rechStart);
+					rechFrame.add(rechPanel);
+					
+					rechFrame.setAlwaysOnTop(true);
+					rechFrame.setVisible(true);
+				}
+				
+			}
+		});
+
+		
+		triA.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(e.getSource() == triA){
+					afficherTitreFilms('a');
 				}
 			}
 		});
 		
+		triP.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(e.getSource() == triP){
+					afficherTitreFilms('p');
+				}
+			}
+		});
+		
+		triS.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(e.getSource() == triS){
+					afficherTitreFilms('s');
+				}
+			}
+		});
+		
+		triD.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(e.getSource() == triD){
+					afficherTitreFilms('d');
+				}
+			}
+		});
 		
 		boutons.setLayout(new GridLayout(5,0));
 		
 		boutons.add(recherche);
-		boutons.add(tri);
-		boutons.add(alpha);
+		boutons.add(triA);
+		boutons.add(triP);
+		boutons.add(triS);
+		boutons.add(triD);
+
 		
 	}
-	
+	/*
 	public void addNavigation() {
 		suivant = new JButton("Suivant");
 		precedent = new JButton("Précédent");
@@ -207,7 +290,7 @@ public class GUI implements ActionListener{
 		navigation.add(precedent);
 		navigation.add(aleatoire);
 		navigation.add(suivant);
-	}
+	}*/
 	
 	public void addLabel() {
 		info = new JLabel();
@@ -307,11 +390,11 @@ public class GUI implements ActionListener{
 		
 	}
 	
-	public void afficherTitreFilms() {
+	public void afficherTitreFilms(char tri) {
 		DefaultListModel<String> listModel = new DefaultListModel<String>();
 
 		try {
-			for (String f : control.cineDome.data.getListeFilms('a')) {
+			for (String f : control.cineDome.data.getListeFilms(tri)) {
 				listModel.addElement(f);
 			}
 		} catch (SQLException e) {
