@@ -49,6 +49,7 @@ public class GUI implements ActionListener{
 	private JScrollPane scrollActeurs;
 	private JLabel affiche ;
 	public Menu control;
+
 	
 	int indexNav = 0 ;
 	
@@ -68,7 +69,7 @@ public class GUI implements ActionListener{
 		addLabel();
 		setListe();
 		setFilm();
-		
+	
 		frame.setVisible(true);
 	}
 	
@@ -120,8 +121,10 @@ public class GUI implements ActionListener{
 		frame.add(film,BorderLayout.CENTER);
 		frame.add(navigation,BorderLayout.SOUTH);
 		frame.add(liste,BorderLayout.EAST);
+	
 		
 	}
+	
 	
 	public void addBoutons() {
 		recherche = new JButton("Rechercher");
@@ -144,6 +147,7 @@ public class GUI implements ActionListener{
 		boutons.add(recherche);
 		boutons.add(tri);
 		boutons.add(alpha);
+		
 	}
 	
 	public void addNavigation() {

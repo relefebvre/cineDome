@@ -3,6 +3,7 @@ import java.util.*;
 public class Cine {
 	public List<Film> films;
 	public Database data;
+
 	
 	public Cine() {
 		this.films = new ArrayList<Film>();
